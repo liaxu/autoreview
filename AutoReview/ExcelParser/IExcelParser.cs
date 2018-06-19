@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoReview.ExcelParser
 {
-    interface ExcelParser
+    interface IExcelParser
     {
         void Init(string path);
         int GetTotalScore();
