@@ -3,3 +3,5 @@
 ################################################################################
 
 /AutoReview/.vs/AutoReview/v15
+/AutoReview/bin/Debug
+/AutoReview/obj/Debug
