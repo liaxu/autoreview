@@ -9,7 +9,7 @@ namespace AutoReview.ZipFileManager
     interface IZipFileManager
     {
         string UnZip(string path);
-        void DeleteFolder(string path);
+        void DeleteFolder(string path, string name);
         List<string> FindFile(string name);
     }
 }
