@@ -10,6 +10,6 @@ namespace AutoReview.ZipFileManager
     {
         string UnZip(string path);
         void DeleteFolder(string path);
-        List<string> FindFile(string name);
+        List<string> FindFile(string path, string name);
     }
 }

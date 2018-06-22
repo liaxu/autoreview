@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>packages\DocumentFormat.OpenXml.2.8.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
@@ -59,6 +60,11 @@
     <Reference Include="NPOI.ScratchPad.HWPF, Version=1.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>packages\NPOI.HWPF.2.3.0\lib\net40\NPOI.ScratchPad.HWPF.dll</HintPath>
     </Reference>
+=======
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+>>>>>>> c73ce2b353d9e2e652afce86b795a07538ce9cff
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -141,12 +147,16 @@
     <Compile Include="SubjectParser\SubjectParserCheck.cs" />
     <Compile Include="TrainingPlan\ITrainingPlan.cs" />
     <Compile Include="ZipFileManager\IZipFileManager.cs" />
+    <Compile Include="ZipFileManager\ZipFileManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+<<<<<<< HEAD
     <None Include="NameRule.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+=======
+>>>>>>> c73ce2b353d9e2e652afce86b795a07538ce9cff
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
