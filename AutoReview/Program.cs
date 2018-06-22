@@ -1,4 +1,5 @@
 ﻿using AutoReview.ClsNameTest;
+using AutoReview.SubjectParser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace AutoReview
         {
             IClsNameTest ct = new ClsNameRuleTest();
             ct.TestName("高等数学", "数学");
+
+            ISubjectParser sp = new SubjectParserCheck();
+            sp.Init("教学大纲.docx");
+            sp.FindClass("高脚本");
         }
     }
 }
