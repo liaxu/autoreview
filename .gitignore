@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+<<<<<<< HEAD
+/AutoReview/.vs/AutoReview/v15
+/AutoReview/bin/Debug
+/AutoReview/obj/Debug
+=======
 # User-specific files
 *.suo
 *.user
@@ -328,3 +333,4 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /ShareDataSite/ShareDataService/Settings.StyleCop
+>>>>>>> c73ce2b353d9e2e652afce86b795a07538ce9cff

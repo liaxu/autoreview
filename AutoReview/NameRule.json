@@ -1,0 +1,12 @@
+﻿[
+  {
+    "SubjectName": "数学",
+    "AllowRule": [ ".*?高等数学.*?", ".*?线性.*?" ],
+    "DeniedRule": [ "678", "890" ]
+  },
+  {
+    "SubjectName": "自然科学",
+    "AllowRule": [ "123", "456" ],
+    "DeniedRule": [ "678", "890" ]
+  }
+]
