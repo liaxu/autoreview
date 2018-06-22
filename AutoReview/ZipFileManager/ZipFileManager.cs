@@ -20,7 +20,7 @@ namespace AutoReview.ZipFileManager
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException("path不能为空");
+                throw new ArgumentNullException("方法参数不能为空");
             }
             if (Directory.Exists(path))
             {
@@ -60,7 +60,7 @@ namespace AutoReview.ZipFileManager
         {
             if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("方法参数不能为为空");
+                throw new ArgumentNullException("方法参数不能为空");
             }
             string[] fileDir = Directory.GetFiles(path, "*" + name + "*", SearchOption.AllDirectories);
             return new List<string>(fileDir);

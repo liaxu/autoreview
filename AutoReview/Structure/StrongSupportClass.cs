@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Structure
 {
-    class StrongSupportClass
+   public class StrongSupportClass
     {
         public string ClassName { get; set; }
         public List<String> supportPoint { get; set; }
