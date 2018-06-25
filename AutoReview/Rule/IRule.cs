@@ -8,6 +8,6 @@ namespace AutoReview.Rule
 {
     interface IRule
     {
-        void CheckRule();
+        void Check();
     }
 }

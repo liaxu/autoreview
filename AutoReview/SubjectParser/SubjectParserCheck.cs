@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoReview.Structure;
 using DocumentFormat.OpenXml.Packaging;
+using NPOI.HWPF;
+using NPOI.XWPF.Extractor;
+using NPOI.XWPF.UserModel;
 
 namespace AutoReview.SubjectParser
 {
@@ -22,14 +26,66 @@ namespace AutoReview.SubjectParser
 
         public bool FindClassWithSupportPoint(StrongSupportClass strongSupportClass)
         {
-            throw new NotImplementedException();
+            int firstPozClassName = textBody.IndexOf(string.Format("《{0}》", strongSupportClass.ClassName));
+            int nextPozMark = textBody.IndexOf("《", firstPozClassName + 1);
+
+            // 跳过目录
+            while (nextPozMark != -1 && nextPozMark - firstPozClassName < 500)
+            {
+                firstPozClassName = textBody.IndexOf(string.Format("《{0}》", strongSupportClass.ClassName), firstPozClassName + 1);
+                nextPozMark = textBody.IndexOf("《", firstPozClassName + 1);
+            }
+
+            if (firstPozClassName == -1)
+            {
+                return false;
+            }
+
+            // 进入正文
+            int nextClassSectionPoz = textBody.IndexOf("教学大纲", firstPozClassName + 200);
+            string classSection = string.Empty;
+            if(nextClassSectionPoz != -1)
+            {
+                classSection = textBody.Substring(firstPozClassName, nextClassSectionPoz - firstPozClassName);
+            }
+            else
+            {
+                classSection = textBody.Substring(firstPozClassName, textBody.Length - firstPozClassName);
+            }
+
+            foreach(var i in strongSupportClass.SupportPoint)
+            {
+                if(classSection.IndexOf(i) == -1)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void Init(string path)
         {
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(path, false))
+            if (path.EndsWith(".doc"))
             {
-                this.textBody = wordDocument.MainDocumentPart.Document.Body.InnerText;
+                HWPFDocument hwpf;
+                using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    hwpf = new HWPFDocument(file);
+                }
+
+                this.textBody = hwpf.Text.ToString();
+            }
+            else if (path.EndsWith(".docx"))
+            {
+                XWPFDocument xwpf;
+                using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    xwpf = new XWPFDocument(file);
+                }
+
+                XWPFWordExtractor ex = new XWPFWordExtractor(xwpf);
+                this.textBody = ex.Text;
             }
         }
     }

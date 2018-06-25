@@ -9,6 +9,6 @@ namespace AutoReview.Structure
     class ClassWithScore
     {
         public string ClassName { get; set; }
-        public int Score { get; set; }
+        public float Score { get; set; }
     }
 }

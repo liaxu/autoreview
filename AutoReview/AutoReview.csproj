@@ -127,7 +127,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalysisResult\IAnalysisResult.cs" />
+    <Compile Include="AnalysisResult\AnalysisLog.cs" />
     <Compile Include="ClsNameTest\ClsNameRule.cs" />
     <Compile Include="ClsNameTest\ClsNameRuleTest.cs" />
     <Compile Include="ClsNameTest\IClsNameTest.cs" />
@@ -136,10 +136,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rule\IRule.cs" />
     <Compile Include="Structure\ClassWithScore.cs" />
+    <Compile Include="Structure\Response.cs" />
     <Compile Include="Structure\StrongSupportClass.cs" />
     <Compile Include="SubjectParser\ISubjectParser.cs" />
     <Compile Include="SubjectParser\SubjectParserCheck.cs" />
     <Compile Include="TrainingPlan\ITrainingPlan.cs" />
+    <Compile Include="TrainingPlan\TrainingPlan.cs" />
     <Compile Include="ZipFileManager\IZipFileManager.cs" />
     <Compile Include="ZipFileManager\ZipFileManager.cs" />
   </ItemGroup>
