@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Structure
 {
-    class ClassWithScore
+   public class ClassWithScore
     {
         public string ClassName { get; set; }
         public float Score { get; set; }

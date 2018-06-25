@@ -1,6 +1,8 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +22,7 @@ namespace AutoReview.ZipFileManager
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException("path不能为空");
+                throw new ArgumentNullException("方法参数不能为空");
             }
             if (Directory.Exists(path))
             {
@@ -60,7 +62,7 @@ namespace AutoReview.ZipFileManager
         {
             if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("方法参数不能为为空");
+                throw new ArgumentNullException("方法参数不能为空");
             }
             string[] fileDir = Directory.GetFiles(path, "*" + name + "*", SearchOption.AllDirectories);
             return new List<string>(fileDir);
@@ -76,19 +78,25 @@ namespace AutoReview.ZipFileManager
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("方法参数不能为空");
-            if (!".zip".Equals(Path.GetExtension(path).ToLower()))
-            {
-                throw new Exception("文件类型错误");
-            }
-            using (ZipInputStream s = new ZipInputStream(File.OpenRead(path)))
+            var destPath = Path.GetDirectoryName(path);
+            UnRAR(path, destPath);
+            return destPath;
+        }
+
+        /// <summary>
+        /// 暂时不用
+        /// </summary>
+        /// <param name="zipFilePath"></param>
+        /// <param name="unzipDestPath"></param>
+        private void UnZip(string zipFilePath,string unzipDestPath)
+        {
+            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFilePath)))
             {
                 ZipEntry theEntry;
                 bool overWrite = false;
-                string tarDirectory = "";
                 string directoryName = "";
-                tarDirectory = Path.GetDirectoryName(path);
-                if (!tarDirectory.EndsWith("\\"))
-                    tarDirectory = tarDirectory + "\\";
+                if (!unzipDestPath.EndsWith("\\"))
+                    unzipDestPath = unzipDestPath + "\\";
                 while ((theEntry = s.GetNextEntry()) != null)
                 {
 
@@ -97,12 +105,12 @@ namespace AutoReview.ZipFileManager
                     if (pathToZip != "")
                         directoryName = Path.GetDirectoryName(pathToZip) + "\\";
                     string fileName = Path.GetFileName(pathToZip);
-                    Directory.CreateDirectory(tarDirectory + directoryName);
+                    Directory.CreateDirectory(unzipDestPath + directoryName);
                     if (fileName != "")
                     {
-                        if ((File.Exists(tarDirectory + directoryName + fileName) && overWrite) || (!File.Exists(tarDirectory + directoryName + fileName)))
+                        if ((File.Exists(unzipDestPath + directoryName + fileName) && overWrite) || (!File.Exists(unzipDestPath + directoryName + fileName)))
                         {
-                            using (FileStream streamWriter = File.Create(tarDirectory + directoryName + fileName))
+                            using (FileStream streamWriter = File.Create(unzipDestPath + directoryName + fileName))
                             {
                                 int size = 2048;
                                 byte[] data = new byte[2048];
@@ -120,11 +128,62 @@ namespace AutoReview.ZipFileManager
                         }
                     }
                 }
-
                 s.Close();
-                return tarDirectory + directoryName;
             }
 
         }
+
+
+        /// <summary>  
+        /// 获取WinRAR.exe路径  
+        /// </summary>  
+        /// <returns>为空则表示未安装WinRAR</returns>  
+        private string ExistsRAR()
+        {
+            RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WinRAR.exe");
+            //RegistryKey regkey = Registry.ClassesRoot.OpenSubKey(@"Applications\WinRAR.exe\shell\open\command");  
+            string strkey = regkey.GetValue("").ToString();
+            regkey.Close();
+            //return strkey.Substring(1, strkey.Length - 7);  
+            return strkey;
+        }
+
+        /// <summary>  
+        /// 解压RAR文件  
+        /// </summary>  
+        /// <param name="rarFilePath">要解压的文件路径</param>  
+        /// <param name="unrarDestPath">解压路径（绝对路径）</param>  
+        private void UnRAR(string rarFilePath, string unrarDestPath)
+        {
+            string rarexe = ExistsRAR();
+            if (String.IsNullOrEmpty(rarexe))
+            {
+                throw new Exception("未安装WinRAR程序。");
+            }
+            try
+            {
+                //组合出需要shell的完整格式  
+                string shellArguments = string.Format("x -t -ibck -o- \"{0}\" \"{1}\\\"", rarFilePath, unrarDestPath);
+
+                //用Process调用  
+                using (Process unrar = new Process())
+                {
+                    ProcessStartInfo startinfo = new ProcessStartInfo();
+                    startinfo.FileName = rarexe;
+                    startinfo.Arguments = shellArguments;               //设置命令参数  
+                    startinfo.WindowStyle = ProcessWindowStyle.Hidden;  //隐藏 WinRAR 窗口  
+                    unrar.StartInfo = startinfo;
+                    unrar.Start();
+                    unrar.WaitForExit();//等待解压完成  
+                    unrar.Close();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
     }
 }
