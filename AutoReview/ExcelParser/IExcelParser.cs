@@ -17,5 +17,7 @@ namespace AutoReview.ExcelParser
         List<string> GetProfessinalCoreClass();
 
         List<StrongSupportClass> GetHighSupportClass();
+
+        void Dispose();
     }
 }
