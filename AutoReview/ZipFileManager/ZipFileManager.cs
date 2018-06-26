@@ -64,7 +64,7 @@ namespace AutoReview.ZipFileManager
             {
                 throw new ArgumentNullException("方法参数不能为空");
             }
-            string[] fileDir = Directory.GetFiles(path, "*" + name + "*", SearchOption.AllDirectories);
+            string[] fileDir = Directory.GetFiles(path, name, SearchOption.AllDirectories);
             return new List<string>(fileDir);
         }
 
