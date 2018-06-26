@@ -1,6 +1,6 @@
 ﻿[
   {
-    "SubjectName": "数学",
+    "SubjectName": "数学类",
     "AllowRule": [ ".*?高等数学.*?", ".*?线性.*?" ],
     "DeniedRule": [ "678", "890" ]
   },

@@ -12,7 +12,7 @@ namespace AutoReview.AnalysisResult
         private static Guid LogId { get; set; }
         public static void AddLog(string content)
         {
-            if(LogId == null)
+            if(LogId == Guid.Empty)
             {
                 LogId = Guid.NewGuid();
             }
@@ -21,12 +21,10 @@ namespace AutoReview.AnalysisResult
             {
                 File.WriteAllLines(string.Format("{0}.txt", LogId), new string[] { "Log start" });
             }
-            else
-            {
-                File.WriteAllLines(string.Format("{0}.txt", LogId), new string[] {
+
+            File.WriteAllLines(string.Format("{0}.txt", LogId), new string[] {
                     string.Format("{0}  {1}",DateTime.Now, content)
                 });
-            }
         }
     }
 }

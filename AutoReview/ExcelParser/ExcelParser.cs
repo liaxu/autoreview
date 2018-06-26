@@ -98,7 +98,7 @@ namespace AutoReview.ExcelParser
             for (var i = 3; i <= sheet.LastRowNum; i++)
             {
                 strongSupportClass = new StrongSupportClass();
-                strongSupportClass.supportPoint = new List<string>();
+                strongSupportClass.SupportPoint = new List<string>();
                 row = sheet.GetRow(i);
                 if (row != null)
                 {
@@ -115,11 +115,11 @@ namespace AutoReview.ExcelParser
                             cell = requireRow.GetCell(j);
                             if(!string.IsNullOrEmpty(cellValue = GetCellValue(cell)))
                             {
-                                strongSupportClass.supportPoint.Add(cellValue);
+                                strongSupportClass.SupportPoint.Add(cellValue);
                             }
                         }
                     }
-                    if (strongSupportClass.supportPoint.Count > 0)
+                    if (strongSupportClass.SupportPoint.Count > 0)
                     {
                         result.Add(strongSupportClass);
                     }

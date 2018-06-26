@@ -78,7 +78,12 @@ namespace AutoReview.ZipFileManager
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("方法参数不能为空");
-            var destPath = Path.GetDirectoryName(path);
+            string destPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+            if(Directory.Exists(destPath) == false)
+            {
+                Directory.CreateDirectory(destPath);
+            }
+
             UnRAR(path, destPath);
             return destPath;
         }
