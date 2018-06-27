@@ -26,6 +26,13 @@ namespace AutoReview.SubjectParser
 
         public bool FindClassWithSupportPoint(StrongSupportClass strongSupportClass)
         {
+            // 课程名称可能存在不同，例如 高等数学A(1)会合并为高等数学A，因此如果找不到课程可以尝试去除小标号
+            if(textBody.IndexOf(strongSupportClass.ClassName) == -1)
+            {
+                Regex regex = new Regex(@"\(\d+\)");
+                strongSupportClass.ClassName = regex.Replace(strongSupportClass.ClassName, string.Empty);
+            }
+
             int firstPozClassName = textBody.IndexOf(string.Format("《{0}》", strongSupportClass.ClassName));
             int nextPozMark = textBody.IndexOf("《", firstPozClassName + 1);
 
