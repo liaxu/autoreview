@@ -10,6 +10,9 @@ namespace AutoReview.TrainingPlan
     interface ITrainingPlan
     {
         void Init(string path);
-        Response FindClassAndScore(string className, float score);
+
+        bool FindClass(string className);
+
+        bool FindClassAndScore(string className, float score);
     }
 }

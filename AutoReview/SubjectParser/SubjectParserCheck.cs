@@ -27,44 +27,41 @@ namespace AutoReview.SubjectParser
                 className = regex.Replace(className, string.Empty);
             }
 
-            className = className.Replace("（", "(").Replace("）",")");
-            regex = new Regex(string.Format(".*?{0}.*?((教学大纲)|(课程简介))",className));
+            className = className.Replace("（", "(").Replace("）", ")");
+            regex = new Regex(string.Format(".*?{0}.*?((教学大纲)|(课程简介))", className));
             // todo we may lost a lot of time here
             bool isMatch = regex.IsMatch(textBody);
             return isMatch;
         }
 
-        public Response FindClassWithSupportPoint(StrongSupportClass strongSupportClass)
+        public bool FindClassWithSupportPoint(string className, string supportPoint)
         {
             // 课程名称可能存在不同，例如 高等数学A(1)会合并为高等数学A，因此如果找不到课程可以尝试去除小标号
-            if(textBody.IndexOf(strongSupportClass.ClassName) == -1)
+            if (textBody.IndexOf(className) == -1)
             {
                 Regex regex = new Regex(@"\(\d+\)");
-                strongSupportClass.ClassName = regex.Replace(strongSupportClass.ClassName, string.Empty);
+                className = regex.Replace(className, string.Empty);
             }
 
-            int firstPozClassName = textBody.IndexOf(string.Format("《{0}》", strongSupportClass.ClassName));
+            int firstPozClassName = textBody.IndexOf(string.Format("《{0}》", className));
             int nextPozMark = textBody.IndexOf("《", firstPozClassName + 1);
 
             // 跳过目录
             while (nextPozMark != -1 && nextPozMark - firstPozClassName < 500)
             {
-                firstPozClassName = textBody.IndexOf(string.Format("《{0}》", strongSupportClass.ClassName), firstPozClassName + 1);
+                firstPozClassName = textBody.IndexOf(string.Format("《{0}》", className), firstPozClassName + 1);
                 nextPozMark = textBody.IndexOf("《", firstPozClassName + 1);
             }
 
             if (firstPozClassName == -1)
             {
-                return new Response() {
-                    ReturnCode = 1,
-                    Message = string.Format("【期望】课程大纲中存在课程{0} 【实际】没有找到课程{0}", strongSupportClass.ClassName)
-                };
+                return false;              
             }
 
             // 进入正文
             int nextClassSectionPoz = textBody.IndexOf("教学大纲", firstPozClassName + 200);
             string classSection = string.Empty;
-            if(nextClassSectionPoz != -1)
+            if (nextClassSectionPoz != -1)
             {
                 classSection = textBody.Substring(firstPozClassName, nextClassSectionPoz - firstPozClassName);
             }
@@ -73,23 +70,11 @@ namespace AutoReview.SubjectParser
                 classSection = textBody.Substring(firstPozClassName, textBody.Length - firstPozClassName);
             }
 
-            foreach(var i in strongSupportClass.SupportPoint)
+            if (classSection.IndexOf(supportPoint) == -1)
             {
-                if(classSection.IndexOf(i) == -1)
-                {
-                    return new Response()
-                    {
-                        ReturnCode = 1,
-                        Message = string.Format("【期望】课程大纲中存在课程{0}与支撑点{1} 【实际】没有支撑点{1}", strongSupportClass.ClassName, i)
-                    };
-                }
+                return false;             
             }
-
-            return new Response()
-            {
-                ReturnCode = 0,
-                Message = string.Empty
-            };
+            return true;
         }
 
         public void Init(string path)
