@@ -24,7 +24,7 @@ namespace AutoReview.SubjectParser
             return isMatch;
         }
 
-        public bool FindClassWithSupportPoint(StrongSupportClass strongSupportClass)
+        public Response FindClassWithSupportPoint(StrongSupportClass strongSupportClass)
         {
             // 课程名称可能存在不同，例如 高等数学A(1)会合并为高等数学A，因此如果找不到课程可以尝试去除小标号
             if(textBody.IndexOf(strongSupportClass.ClassName) == -1)
@@ -45,7 +45,10 @@ namespace AutoReview.SubjectParser
 
             if (firstPozClassName == -1)
             {
-                return false;
+                return new Response() {
+                    ReturnCode = 1,
+                    Message = string.Format("【期望】课程大纲中存在课程{0} 【实际】没有找到课程{0}", strongSupportClass.ClassName)
+                };
             }
 
             // 进入正文
@@ -64,11 +67,19 @@ namespace AutoReview.SubjectParser
             {
                 if(classSection.IndexOf(i) == -1)
                 {
-                    return false;
+                    return new Response()
+                    {
+                        ReturnCode = 1,
+                        Message = string.Format("【期望】课程大纲中存在课程{0}与支撑点{1} 【实际】没有支撑点{1}", strongSupportClass.ClassName, i)
+                    };
                 }
             }
 
-            return true;
+            return new Response()
+            {
+                ReturnCode = 0,
+                Message = string.Empty
+            };
         }
 
         public void Init(string path)

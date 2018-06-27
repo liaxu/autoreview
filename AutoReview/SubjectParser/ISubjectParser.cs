@@ -11,6 +11,6 @@ namespace AutoReview.SubjectParser
     {
         void Init(string path);
         bool FindClass(string className);
-        bool FindClassWithSupportPoint(StrongSupportClass strongSupportClass);
+        Response FindClassWithSupportPoint(StrongSupportClass strongSupportClass);
     }
 }
