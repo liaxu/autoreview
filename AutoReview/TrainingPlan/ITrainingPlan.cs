@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoReview.Structure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace AutoReview.TrainingPlan
     interface ITrainingPlan
     {
         void Init(string path);
-        bool FindClassAndScore(string className, int score);
+        Response FindClassAndScore(string className, float score);
     }
 }

@@ -18,7 +18,17 @@ namespace AutoReview.SubjectParser
         public string textBody { get; set; }
         public bool FindClass(string className)
         {
-            Regex regex = new Regex(string.Format(".*?{0}.*?((教学大纲)|(课程简介))",className));
+            Regex regex = null;
+            // 课程名称可能存在不同，例如 高等数学A(1)会合并为高等数学A，因此如果找不到课程可以尝试去除小标号
+            regex = new Regex(string.Format(".*?{0}.*?((教学大纲)|(课程简介))", className));
+            if (regex.IsMatch(textBody) == false)
+            {
+                regex = new Regex(@"\(\d+\)");
+                className = regex.Replace(className, string.Empty);
+            }
+
+            className = className.Replace("（", "(").Replace("）",")");
+            regex = new Regex(string.Format(".*?{0}.*?((教学大纲)|(课程简介))",className));
             // todo we may lost a lot of time here
             bool isMatch = regex.IsMatch(textBody);
             return isMatch;
@@ -105,6 +115,8 @@ namespace AutoReview.SubjectParser
                 XWPFWordExtractor ex = new XWPFWordExtractor(xwpf);
                 this.textBody = ex.Text;
             }
+
+            textBody = textBody.Replace("（", "(").Replace("）", ")");
         }
     }
 }

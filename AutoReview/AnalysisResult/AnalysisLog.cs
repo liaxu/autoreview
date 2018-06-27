@@ -19,12 +19,15 @@ namespace AutoReview.AnalysisResult
 
             if (File.Exists(string.Format("{0}.txt", LogId)) == false)
             {
-                File.WriteAllLines(string.Format("{0}.txt", LogId), new string[] { "Log start" });
+                File.AppendAllLines(string.Format("{0}.txt", LogId), new string[] { "Log start" });
+                Console.WriteLine( "Log start");
             }
 
-            File.WriteAllLines(string.Format("{0}.txt", LogId), new string[] {
+            File.AppendAllLines(string.Format("{0}.txt", LogId), new string[] {
                     string.Format("{0}  {1}",DateTime.Now, content)
                 });
+
+            Console.WriteLine(string.Format("{0}  {1}", DateTime.Now, content));
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AutoReview.Rule
             ClsNameRuleTest cnt = new ClsNameRuleTest();
             ExcelParser.ExcelParser ep = new ExcelParser.ExcelParser();
             string zipFilePath = zfm.UnZip(@"d:\报告.zip");
-            List<string> filePaths = zfm.FindFile(zipFilePath, "知识领域覆盖表");
+            List<string> filePaths = zfm.FindFile(zipFilePath, "*知识领域覆盖表*.*");
             foreach (var path in filePaths)
             {
                 ep.Init(path);
@@ -42,7 +42,7 @@ namespace AutoReview.Rule
                 }
 
                 // 需存在教学大纲
-                List<string> subjectFilePaths = zfm.FindFile(zipFilePath, "教学大纲");
+                List<string> subjectFilePaths = zfm.FindFile(zipFilePath, "*教学大纲.*");
                 SubjectParserCheck sp = new SubjectParserCheck();
                 if (subjectFilePaths.Count() == 0)
                 {
@@ -70,7 +70,7 @@ namespace AutoReview.Rule
                 }
 
                 // 需存在培养方案
-                List<string> trainingFilePaths = zfm.FindFile(zipFilePath, "培养方案");
+                List<string> trainingFilePaths = zfm.FindFile(zipFilePath, "*培养方案.*");
                 TrainingPlan.TrainingPlan tp = new TrainingPlan.TrainingPlan();
                 if (trainingFilePaths.Count() == 0)
                 {
@@ -85,12 +85,12 @@ namespace AutoReview.Rule
                 // 课程和学分在培养方案中可查询到
                 List<ClassWithScore> allClassWithScore = new List<ClassWithScore>();
                 allClassWithScore.Concat(ep.GetClassName("数学类"));
-                foreach (var i in professionalCoreClassList)
+                foreach (var i in allClassWithScore)
                 {
-                    var ret = sp.FindClass(i);
-                    if (ret == false)
+                    var response = tp.FindClassAndScore(i.ClassName, i.Score);
+                    if (response.ReturnCode == 1)
                     {
-                        AnalysisLog.AddLog(string.Format("【期望】课程和学分在培养方案中可查询到  【实际】", i));
+                        AnalysisLog.AddLog(response.Message);
                     }
                 }
             }

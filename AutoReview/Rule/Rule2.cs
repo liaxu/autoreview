@@ -19,7 +19,7 @@ namespace AutoReview.Rule
             string zipFilePath = "";
             try
             {
-                zipFilePath = zfm.UnZip(@"C:\Users\v-misun\Desktop\a\报告.zip");
+                zipFilePath = zfm.UnZip(@"d:\报告.zip");
             }
             catch(Exception x)
             {

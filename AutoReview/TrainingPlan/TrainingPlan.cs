@@ -16,9 +16,29 @@ namespace AutoReview.TrainingPlan
         public string textBody { get; private set; }
         public List<ClassWithScore> classWithScoreList { get; private set; }
 
-        public bool FindClassAndScore(string className, int score)
+        public Response FindClassAndScore(string className, float score)
         {
-            return classWithScoreList.Where(x => x.ClassName == className && x.Score == score).Count() > 0;
+            if (classWithScoreList.Where(x => x.ClassName == className).Count() == 0)
+            {
+                return new Response() {
+                    ReturnCode = 1,
+                    Message = string.Format("【期望】课程{0}与学分{1}在培养方案中存在    【实际】课程{0}不存在", className, score)
+                };
+            }
+            else if (classWithScoreList.Where(x => x.ClassName == className && x.Score == score).Count() == 0)
+            {
+                float actualScore = classWithScoreList.Where(x => x.ClassName == className).FirstOrDefault().Score;
+
+                return new Response()
+                {
+                    ReturnCode = 1,
+                    Message = string.Format("【期望】课程{0}与学分{1}在培养方案中存在    【实际】课程{0}学分为{1}", className, actualScore)
+                };
+            }
+            return new Response() {
+                ReturnCode = 0,
+                Message = string.Empty
+            };
         }
 
         public void Init(string path)
