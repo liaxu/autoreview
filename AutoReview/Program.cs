@@ -13,8 +13,8 @@ namespace AutoReview
     {
         static void Main(string[] args)
         {
-            Rule1 r1 = new Rule1();
-            r1.Check();
+            //Rule1 r1 = new Rule1();
+            //r1.Check();
             Rule2 r2 = new Rule2();
             r2.Check();
         }
